@@ -1,38 +1,54 @@
 'use strict';
+
+const file404 = require('./404.js');
+const helium = require('./helium.js');
+const index = require('./index.js');
+const hydrogen = require('./hydrogen.js');
+const styles = require('./styles.js');
+
 const net = require('net');
 
-const dataFiles = require('./data.js');
+let date = new Date();
+let content = '';
+let status = '200 OK';
 
-const contentObj = dataFiles.contentObj;
-
-console.log(contentObj[2]);
 // this creates a server
 const server = net
   .createServer((socket) => {
     socket.setEncoding('utf8');
     socket.on('data', (data) => {
       // this is the request
+      console.log(data);
 
       // do work here
 
-      let endIndex = data.indexOf(` HTTP/1.1`);
-      let headValue = data.substring(5, endIndex);
-      let myResponse = '';
+      let URI = data.slice(data.indexOf('/'), data.indexOf('HTTP') - 1);
 
-      for (let i = 0; i < contentObj.length; i++) {
-        if (headValue === contentObj[i].name) {
-          myResponse = `HTTP/1.1 200 OK
-        Content-Length: ${contentObj[i].content.length}
-        
-        ${contentObj[i].content}
-        `;
-        }
+      if (URI === '/index.html') {
+        content = index;
       }
+      if (URI === '/hydrogen.html') {
+        content = hydrogen;
+      }
+      if (URI === '/helium.html') {
+        content = helium;
+      }
+      if (URI === '/styles.css') {
+        content = styles;
+      }
+      if (URI === '/404.html') {
+        content = file404;
+        status = '404 File Not Found';
+      }
+      let response = `HTTP/1.1 ${status}
+      Date: ${date}
+Content-Length: ${content.length}
 
-      console.log('headValue :', headValue);
+${content}
+`;
 
       // send response back here
-      socket.end(myResponse);
+      socket.end(response);
     });
   })
   // handle errors on the server
@@ -40,7 +56,7 @@ const server = net
     console.log(err);
   });
 
-// this starts the server
+// this starts the serve
 server.listen(8080, () => {
   console.log('Server is UP');
 });

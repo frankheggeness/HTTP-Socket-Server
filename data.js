@@ -196,4 +196,4 @@ const contentObj = [
   },
 ];
 
-console.log(contentObj);
+module.exports = contentObj;
