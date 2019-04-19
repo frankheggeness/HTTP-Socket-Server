@@ -8,10 +8,11 @@ const styles = require('./styles.js');
 
 const net = require('net');
 
-let date = new Date();
+let date = new Date().toUTCString();
 let content = '';
 let status = '200 OK';
 const defaultStatus = '200 OK';
+// banana
 
 // this creates a server
 const server = net
@@ -47,8 +48,7 @@ const server = net
       }
       let response = `HTTP/1.1 ${status}
       Date: ${date}
-Content-Length: ${content.length}
-
+Content-Length: ${content.length}\r\n\r\n
 ${content}
 `;
 
