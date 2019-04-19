@@ -34,7 +34,7 @@ if (!args[2]) {
   console.log(`\tFor example: "node client.js devleague.com/ GET" or "node client.js manoabbq.com/ POST"\n`);
   console.log(`\tYou can also add a fifth argument '-h' in order to only grab the header.`);
   console.log(`\tFor example: "node client.js devleague.com/ GET -h"\n`);
-  console.log(`\tFinally you can choose to save the server response as a file. File name must come after '-save'`);
+  console.log(`\tFinally, you can choose to save the server response as a file. File name must come after '-save'`);
   console.log(`\tTry: "node client.js devleague.com/ -save *fileName*"\n`);
   process.exit();
 }
@@ -61,6 +61,7 @@ request += `\r\n`;
 if (args[4] === '-h' || args[3] === '-h') {
   headerRequest = true;
 }
+// create connection
 
 const client = net.createConnection(port, findHost, () => {
   client.setEncoding('utf-8');
@@ -71,18 +72,33 @@ const client = net.createConnection(port, findHost, () => {
 
   client.write(request);
 });
-if (headerRequest) {
-  client.on('data', (data) => {
+
+// on data
+
+client.on('data', (data) => {
+  let status = data.slice(data.indexOf('.') + 3, data.indexOf('\r\n'));
+  if (status[0] === '4') {
+    process.stdout.write(`Client Error: ${status}\r\n`);
+  }
+
+  if (headerRequest) {
     let endHeader = data.indexOf('\r\n\r\n');
 
     let headerOnly = data.slice(data[0], endHeader);
     headerObj[findHost] = headerOnly;
     console.log(headerObj);
-
     process.stdout.write(`${headerOnly}`);
-  });
-} else {
-  client.on('data', (data) => {
+
+    if (saveResponse) {
+      fs.writeFile(fileName, data, function(err) {
+        if (err) {
+          return console.log(err);
+        }
+
+        console.log('The file was saved!');
+      });
+    }
+  } else {
     process.stdout.write(data);
     if (saveResponse) {
       fs.writeFile(fileName, data, function(err) {
@@ -93,8 +109,8 @@ if (headerRequest) {
         console.log('The file was saved!');
       });
     }
-  });
-}
+  }
+});
 
 client.on('end', () => {
   console.log('The connection has ended');
