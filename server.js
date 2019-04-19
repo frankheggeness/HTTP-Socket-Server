@@ -11,6 +11,7 @@ const net = require('net');
 let date = new Date();
 let content = '';
 let status = '200 OK';
+const defaultStatus = '200 OK';
 
 // this creates a server
 const server = net
@@ -24,17 +25,21 @@ const server = net
 
       let URI = data.slice(data.indexOf('/'), data.indexOf('HTTP') - 1);
 
-      if (URI === '/index.html') {
+      if (URI === '/index.html' || URI === '/') {
         content = index;
+        status = defaultStatus;
       }
       if (URI === '/hydrogen.html') {
         content = hydrogen;
+        status = defaultStatus;
       }
       if (URI === '/helium.html') {
         content = helium;
+        status = defaultStatus;
       }
       if (URI === '/styles.css') {
         content = styles;
+        status = defaultStatus;
       }
       if (URI === '/404.html') {
         content = file404;
