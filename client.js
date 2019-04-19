@@ -5,6 +5,11 @@ let port = 80;
 
 let args = process.argv;
 let date = new Date();
+let method = `GET`;
+
+if (args[3]) {
+  method = args[3];
+}
 
 if (!args[2]) {
   process.stdout.write('no argument, try request /index.html');
@@ -25,12 +30,13 @@ if (argument.indexOf('localhost') !== -1) {
   newRequest = argument.substring(findIndex, argument.length);
 }
 
-let request = `GET ${newRequest} HTTP/1.1\r\n`;
+let request = `${method} ${newRequest} HTTP/1.1\r\n`;
 request += `host: ${findHost}\r\n`;
 request += `date: ${new Date().toUTCString()}\r\n`;
 request += `\r\n`;
 
 console.log(request);
+console.log(findHost);
 
 const client = net.createConnection(port, findHost, () => {
   client.setEncoding('utf-8');
@@ -43,7 +49,7 @@ const client = net.createConnection(port, findHost, () => {
 });
 
 client.on('data', (data) => {
-  console.log(data.toString());
+  process.stdout.write(data);
 });
 
 client.on('end', () => {
