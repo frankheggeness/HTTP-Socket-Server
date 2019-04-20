@@ -2,10 +2,9 @@
 
 const fs = require('fs');
 const net = require('net');
+
 let port = 80;
-
 let args = process.argv;
-
 let method = `GET`;
 let headerRequest = false;
 let headerObj = {};
@@ -24,6 +23,8 @@ if (saveResponse) {
   let saveIndex = args.indexOf('-save');
   fileName = args[saveIndex + 1];
 }
+// user manual
+
 if (!args[2]) {
   console.log(`\n\tPlease specify a host/uri after "node client.js"\n`);
   console.log(`\tYou can request localhost using "localhost/[uri]", for example "localhost/helium.html"`);
@@ -79,6 +80,10 @@ client.on('data', (data) => {
   let status = data.slice(data.indexOf('.') + 3, data.indexOf('\r\n'));
   if (status[0] === '4') {
     process.stdout.write(`Client Error: ${status}\r\n`);
+  } else if (status[0] === '5') {
+    process.stdout.write(`Server Error: ${status}\r\n`);
+  } else if (status[0] === '3') {
+    process.stdout.write(`Redirection: ${status}\r\n`);
   }
 
   if (headerRequest) {

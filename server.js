@@ -5,14 +5,12 @@ const helium = require('./helium.js');
 const index = require('./index.js');
 const hydrogen = require('./hydrogen.js');
 const styles = require('./styles.js');
-
 const net = require('net');
 
 let date = new Date().toUTCString();
 let content = '';
 let status = '200 OK';
 const defaultStatus = '200 OK';
-// banana
 
 // this creates a server
 const server = net
