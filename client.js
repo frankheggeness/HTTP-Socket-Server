@@ -91,7 +91,6 @@ client.on('data', (data) => {
 
     let headerOnly = data.slice(data[0], endHeader);
     headerObj[findHost] = headerOnly;
-    console.log(headerObj);
     process.stdout.write(`${headerOnly}`);
 
     if (saveResponse) {
