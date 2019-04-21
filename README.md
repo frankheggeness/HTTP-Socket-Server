@@ -68,14 +68,13 @@ curl localhost:8080/incorrect-path
 ### Routes
 
 | HTTP | Path            | Content       |
-|------|-----------------|---------------|
+| ---- | --------------- | ------------- |
 | GET  | /               | index.html    |
 | GET  | /index.html     | index.html    |
 | GET  | /hydrogen.html  | hydrogen.html |
 | GET  | /helium.html    | helium.html   |
 | GET  | /404.html       | 404.html      |
 | GET  | /css/styles.css | styles.css    |
-
 
 ### Advanced
 
@@ -110,7 +109,9 @@ The client will run once, then exit.
 
 1. Create a client to establish TCP socket connections to HTTP servers
 1. The node command requires a single argument, the host and uri to request a resource from
-  - example: `www.devleague.com/apply`
+
+- example: `www.devleague.com/apply`
+
 1. Transmit 'standard' HTTP Headers to the server
 1. Wait for a response from the server
 1. When the server responds, display the response message body to the terminal
@@ -151,12 +152,12 @@ node client.js localhost
 1. CLI Option to display headers only (instead of content body)
 1. CLI Option to set the port to use to connect to the server
 1. Error Handling
-  1. Handle the case where the HTTP Request is a client error (40x)
-  1. Handle the case where the host can not be reached
-  1. Handle the case where the host is found, and not listening on port 80
-  1. Handle the case where the host is found and listening on the specified port, and not returning a valid HTTP Response
-  1. Handle the case where the HTTP Response results in a server error (50x)
-  1. Handle any other errors that you may encounter
+1. Handle the case where the HTTP Request is a client error (40x)
+1. Handle the case where the host can not be reached
+1. Handle the case where the host is found, and not listening on port 80
+1. Handle the case where the host is found and listening on the specified port, and not returning a valid HTTP Response
+1. Handle the case where the HTTP Response results in a server error (50x)
+1. Handle any other errors that you may encounter
 
 ### Advanced Client
 
